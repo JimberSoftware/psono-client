@@ -27,7 +27,7 @@ module.exports = merge(common, {
     },
     proxy: {
       '/server': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:10100',
         pathRewrite: { '^/server': '' },
       },
     },
