@@ -1,0 +1,407 @@
+/* Jimber branding overrides - matching jimber.io */
+:root {
+  /* Main backgrounds - dark navy like jimber.io */
+  --jimber-bg: #0b1120;
+  --jimber-bg-darker: #060b14;
+  --jimber-panel: #111827;
+  --jimber-panel-lighter: #1f2937;
+  --jimber-border: #1e293b;
+  
+  /* Text colors */
+  --jimber-text: #f1f5f9;
+  --jimber-text-muted: #94a3b8;
+  --jimber-text-dim: #64748b;
+  
+  /* Jimber teal accent - from jimber.io */
+  --jimber-accent: #14b8a6;
+  --jimber-accent-hover: #0d9488;
+  --jimber-accent-light: #2dd4bf;
+  --jimber-accent-glow: rgba(20, 184, 166, 0.15);
+  --jimber-accent-glow-strong: rgba(20, 184, 166, 0.3);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+html, body {
+  background: var(--jimber-bg) !important;
+  color: var(--jimber-text) !important;
+}
+
+body.loading {
+  background: var(--jimber-bg) !important;
+}
+
+/* ============================================
+   PANELS & CARDS
+   ============================================ */
+.MuiPaper-root,
+.MuiCard-root,
+.MuiDialog-paper,
+.MuiMenu-paper,
+.MuiPopover-paper,
+.topbar,
+.navbar,
+.panel,
+.card,
+.dialog,
+.modal-content {
+  background: var(--jimber-panel) !important;
+  border: 1px solid var(--jimber-border) !important;
+  color: var(--jimber-text) !important;
+}
+
+/* Dark box (login panel) */
+.dark-box,
+[class*="dark-box"],
+[class*="DarkBox"] {
+  background: var(--jimber-panel) !important;
+  border: 1px solid var(--jimber-border) !important;
+}
+
+/* ============================================
+   INPUT FIELDS
+   ============================================ */
+input,
+select,
+textarea,
+.form-control,
+.MuiInputBase-root,
+.MuiOutlinedInput-root,
+.MuiFilledInput-root,
+.MuiInput-root {
+  background: var(--jimber-bg-darker) !important;
+  border: 1px solid var(--jimber-border) !important;
+  color: var(--jimber-text) !important;
+  border-radius: 6px !important;
+}
+
+/* Input hover */
+input:hover,
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--jimber-panel-lighter) !important;
+}
+
+/* Input focus */
+input:focus,
+select:focus,
+textarea:focus,
+.form-control:focus,
+.MuiOutlinedInput-root.Mui-focused,
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--jimber-accent) !important;
+  box-shadow: 0 0 0 3px var(--jimber-accent-glow) !important;
+  outline: none !important;
+}
+
+/* Input outlines */
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--jimber-border) !important;
+}
+
+/* ============================================
+   LABELS & TEXT
+   ============================================ */
+.MuiInputLabel-root,
+.MuiFormLabel-root,
+label {
+  color: var(--jimber-text-muted) !important;
+}
+
+.MuiInputLabel-root.Mui-focused,
+.MuiFormLabel-root.Mui-focused {
+  color: var(--jimber-accent) !important;
+}
+
+.MuiInputAdornment-root,
+.MuiInputAdornment-root .MuiTypography-root {
+  color: var(--jimber-text-dim) !important;
+}
+
+.text-muted,
+.text-secondary,
+small,
+.MuiTypography-colorTextSecondary {
+  color: var(--jimber-text-muted) !important;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+button,
+.btn,
+.btn-primary,
+.MuiButton-root,
+.MuiButton-containedPrimary {
+  background: var(--jimber-accent) !important;
+  border: none !important;
+  color: #0b1120 !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  text-transform: none !important;
+  transition: all 0.2s ease !important;
+}
+
+button:hover,
+.btn:hover,
+.btn-primary:hover,
+.MuiButton-root:hover,
+.MuiButton-containedPrimary:hover {
+  background: var(--jimber-accent-hover) !important;
+  box-shadow: 0 4px 12px var(--jimber-accent-glow-strong) !important;
+}
+
+/* Secondary/outlined buttons */
+.btn-secondary,
+.btn-outline,
+.MuiButton-outlined,
+.MuiButton-text {
+  background: transparent !important;
+  border: 1px solid var(--jimber-border) !important;
+  color: var(--jimber-text) !important;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover,
+.MuiButton-outlined:hover,
+.MuiButton-text:hover {
+  background: var(--jimber-panel-lighter) !important;
+  border-color: var(--jimber-accent) !important;
+  color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+a,
+.MuiLink-root {
+  color: var(--jimber-accent) !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+a:hover,
+.MuiLink-root:hover {
+  color: var(--jimber-accent-light) !important;
+  text-decoration: underline !important;
+}
+
+/* ============================================
+   CHECKBOXES & SWITCHES
+   ============================================ */
+.MuiCheckbox-root,
+.MuiSwitch-root .MuiSwitch-track {
+  color: var(--jimber-border) !important;
+}
+
+.MuiCheckbox-root.Mui-checked,
+.MuiSwitch-root.Mui-checked .MuiSwitch-track {
+  color: var(--jimber-accent) !important;
+  background-color: var(--jimber-accent) !important;
+}
+
+.MuiSwitch-root.Mui-checked .MuiSwitch-thumb {
+  color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   SIDEBAR & NAVIGATION
+   ============================================ */
+.MuiDrawer-paper {
+  background: var(--jimber-panel) !important;
+  border-right: 1px solid var(--jimber-border) !important;
+}
+
+.MuiListItem-root {
+  color: var(--jimber-text-muted) !important;
+  border-radius: 6px !important;
+  margin: 2px 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.MuiListItem-root:hover {
+  background: var(--jimber-accent-glow) !important;
+  color: var(--jimber-text) !important;
+}
+
+.MuiListItem-root.Mui-selected,
+.MuiListItem-root.Mui-selected:hover {
+  background: var(--jimber-accent-glow-strong) !important;
+  color: var(--jimber-accent) !important;
+  border-left: 3px solid var(--jimber-accent) !important;
+}
+
+/* ============================================
+   ICONS
+   ============================================ */
+.MuiSvgIcon-root,
+.fa,
+[class*="fa-"] {
+  color: var(--jimber-text-muted) !important;
+}
+
+.MuiIconButton-root:hover .MuiSvgIcon-root,
+a:hover .fa {
+  color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+.MuiTable-root {
+  background: var(--jimber-panel) !important;
+}
+
+.MuiTableCell-root {
+  border-color: var(--jimber-border) !important;
+  color: var(--jimber-text) !important;
+}
+
+.MuiTableCell-head {
+  background: var(--jimber-bg-darker) !important;
+  color: var(--jimber-text-muted) !important;
+  font-weight: 600 !important;
+}
+
+.MuiTableRow-root:hover {
+  background: var(--jimber-accent-glow) !important;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+.MuiTab-root {
+  color: var(--jimber-text-muted) !important;
+  text-transform: none !important;
+}
+
+.MuiTab-root.Mui-selected {
+  color: var(--jimber-accent) !important;
+}
+
+.MuiTabs-indicator {
+  background-color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   TOOLTIPS & POPOVERS
+   ============================================ */
+.MuiTooltip-tooltip {
+  background: var(--jimber-panel-lighter) !important;
+  color: var(--jimber-text) !important;
+  border: 1px solid var(--jimber-border) !important;
+}
+
+/* ============================================
+   ALERTS & NOTIFICATIONS
+   ============================================ */
+.MuiAlert-root {
+  border-radius: 6px !important;
+}
+
+.MuiAlert-standardSuccess {
+  background: rgba(20, 184, 166, 0.1) !important;
+  color: var(--jimber-accent-light) !important;
+  border: 1px solid var(--jimber-accent) !important;
+}
+
+.MuiAlert-standardError {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #fca5a5 !important;
+  border: 1px solid #ef4444 !important;
+}
+
+.MuiAlert-standardWarning {
+  background: rgba(245, 158, 11, 0.1) !important;
+  color: #fcd34d !important;
+  border: 1px solid #f59e0b !important;
+}
+
+.MuiAlert-standardInfo {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: #93c5fd !important;
+  border: 1px solid #3b82f6 !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--jimber-bg-darker);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--jimber-panel-lighter);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--jimber-accent);
+}
+
+/* ============================================
+   DIALOGS & MODALS
+   ============================================ */
+.MuiDialog-paper {
+  background: var(--jimber-panel) !important;
+  border-radius: 12px !important;
+}
+
+.MuiDialogTitle-root {
+  background: var(--jimber-bg-darker) !important;
+  border-bottom: 1px solid var(--jimber-border) !important;
+}
+
+.MuiDialogActions-root {
+  background: var(--jimber-bg-darker) !important;
+  border-top: 1px solid var(--jimber-border) !important;
+}
+
+/* ============================================
+   CHIPS & BADGES
+   ============================================ */
+.MuiChip-root {
+  background: var(--jimber-panel-lighter) !important;
+  color: var(--jimber-text) !important;
+  border: 1px solid var(--jimber-border) !important;
+}
+
+.MuiChip-root.MuiChip-colorPrimary {
+  background: var(--jimber-accent-glow-strong) !important;
+  color: var(--jimber-accent) !important;
+  border-color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   PROGRESS & LOADING
+   ============================================ */
+.MuiCircularProgress-root,
+.MuiLinearProgress-root {
+  color: var(--jimber-accent) !important;
+}
+
+.MuiLinearProgress-bar {
+  background-color: var(--jimber-accent) !important;
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+  background: var(--jimber-accent-glow-strong);
+  color: var(--jimber-text);
+}
+
+/* ============================================
+   FOCUS VISIBLE (Accessibility)
+   ============================================ */
+*:focus-visible {
+  outline: 2px solid var(--jimber-accent) !important;
+  outline-offset: 2px !important;
+}

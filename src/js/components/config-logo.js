@@ -21,7 +21,7 @@ const ConfigLogo = (props) => {
         }
     };
     return (
-        <img alt="Psono" src={imageSrc} {...rest} />
+        <img alt="Jimber" src={imageSrc} {...rest} />
     );
 };
 

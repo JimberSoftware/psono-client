@@ -1,6 +1,11 @@
 {
+  "logo": "img/logo.svg",
+  "logo_inverse": "img/logo.svg",
   "backend_servers": [{
-    "title": "Local Dev Server",
+    "title": "Jimber Passwords",
+    "url": "https://passwords.jimber.io"
+  },{
+    "title": "Local Dev",
     "url": "http://localhost:10100"
   }],
   "allow_custom_server": true,
@@ -9,15 +14,15 @@
   "allow_delete_account": true,
   "authentication_methods": ["AUTHKEY", "LDAP"],
   "more_links": [{
-    "href": "https://doc.psono.com/",
-    "title": "DOCUMENTATION",
+    "href": "https://jimber.io/",
+    "title": "HOME",
     "class": "fa-book"
   },{
     "href": "privacy-policy.html",
     "title": "PRIVACY_POLICY",
     "class": "fa-user-secret"
   },{
-    "href": "https://www.psono.com",
+    "href": "https://jimber.io/about-us",
     "title": "ABOUT_US",
     "class": "fa-info-circle"
   }]
