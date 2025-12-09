@@ -2,17 +2,24 @@
   "logo": "img/logo.svg",
   "logo_inverse": "img/logo.svg",
   "backend_servers": [{
-    "title": "Jimber Passwords",
-    "url": "https://passwords.jimber.io"
-  },{
     "title": "Local Dev",
     "url": "http://localhost:10100"
+  },{
+    "title": "Jimber Passwords",
+    "url": "https://passwords.jimber.io"
   }],
   "allow_custom_server": true,
-  "allow_registration": true,
-  "allow_lost_password": true,
-  "allow_delete_account": true,
-  "authentication_methods": ["AUTHKEY", "LDAP"],
+  "allow_registration": false,
+  "allow_lost_password": false,
+  "allow_delete_account": false,
+  "auto_login": true,
+  "authentication_methods": ["OIDC"],
+  "oidc_provider": [{
+    "provider_id": 1,
+    "title": "Login with Jimber",
+    "button_name": "Login with Google"
+  }],
+  "saml_provider": [],
   "more_links": [{
     "href": "https://jimber.io/",
     "title": "HOME",

@@ -327,6 +327,38 @@ function oidcLogin(login_info, login_info_nonce, public_key, session_duration) {
 }
 
 /**
+ * Ajax POST request to save OIDC user's encryption keys after setup
+ *
+ * @param {string} setup_token_id The setup token from login response
+ * @param {string} public_key The user's public key
+ * @param {string} private_key The encrypted private key
+ * @param {string} private_key_nonce The nonce for private key encryption
+ * @param {string} secret_key The encrypted secret key
+ * @param {string} secret_key_nonce The nonce for secret key encryption
+ *
+ * @returns {Promise} Returns a promise with the result
+ */
+function oidcSetupKeys(setup_token_id, public_key, private_key, private_key_nonce, secret_key, secret_key_nonce, user_session_public_key, session_duration, device_fingerprint, device_description) {
+    const endpoint = "/oidc/setup-keys/";
+    const method = "POST";
+    const data = {
+        setup_token_id: setup_token_id,
+        public_key: public_key,
+        private_key: private_key,
+        private_key_nonce: private_key_nonce,
+        secret_key: secret_key,
+        secret_key_nonce: secret_key_nonce,
+        user_session_public_key: user_session_public_key,
+        session_duration: session_duration,
+        device_fingerprint: device_fingerprint,
+        device_description: device_description,
+    };
+    const headers = null;
+
+    return call(method, endpoint, data, headers);
+}
+
+/**
  * Ajax POST request to the backend with the OATH-TOTP Token
  *
  * @param {string} token authentication token of the user, returned by authentication_login(email, authkey)
@@ -3928,6 +3960,7 @@ const apiClientService = {
     oidcInitiateLogin: oidcInitiateLogin,
     samlLogin: samlLogin,
     oidcLogin: oidcLogin,
+    oidcSetupKeys: oidcSetupKeys,
     gaVerify: gaVerify,
     duoVerify: duoVerify,
     yubikeyOtpVerify: yubikeyOtpVerify,

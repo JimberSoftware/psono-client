@@ -115,6 +115,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 const defaultTimer = 2 * 60;
+// Helper to normalize errors to a string array
+const normalizeErrors = (result) => {
+    if (Array.isArray(result)) {
+        return result.map(e => typeof e === 'string' ? e : (e?.message || e?.detail || e?.error || 'UNKNOWN_ERROR'));
+    }
+    if (typeof result === 'string') {
+        return [result];
+    }
+    if (result && typeof result === 'object') {
+        if (result.non_field_errors) {
+            return Array.isArray(result.non_field_errors) ? result.non_field_errors : [result.non_field_errors];
+        }
+        if (result.errors) {
+            return Array.isArray(result.errors) ? result.errors : [result.errors];
+        }
+        if (result.message) return [result.message];
+        if (result.detail) return [result.detail];
+        if (result.error) return [typeof result.error === 'string' ? result.error : 'UNKNOWN_ERROR'];
+        if (result.data) return normalizeErrors(result.data);
+    }
+    return ['UNKNOWN_ERROR'];
+};
+
 const LoginViewForm = (props) => {
     const theme = useTheme();
     const classes = useStyles();
@@ -153,6 +176,10 @@ const LoginViewForm = (props) => {
     const [allowCustomServer, setAllowCustomServer] = useState(true);
     const [allowUsernamePasswordLogin, setAllowUsernamePasswordLogin] = useState(true);
     const [decryptLoginDataFunction, setDecryptLoginDataFunction] = useState(null);
+    const [oidcSetupData, setOidcSetupData] = useState(null);
+    const [setupPassword, setSetupPassword] = useState("");
+    const [setupPasswordConfirm, setSetupPasswordConfirm] = useState("");
+    const [loginInProgress, setLoginInProgress] = useState(false);
     const ivalt = useSelector((store) => store.user.ivalt);
 	const [timer, setTimer] = useState(defaultTimer);
 	const [ivaltLoading, setIvaltLoading] = useState(false);
@@ -229,7 +256,8 @@ const LoginViewForm = (props) => {
                     handleLogin(loginDetails)
                 },
                 (errors) => {
-                    setErrors(errors);
+                    setLoginLoading(false);
+                    setErrors(normalizeErrors(errors));
                 }
             );
         }
@@ -241,7 +269,8 @@ const LoginViewForm = (props) => {
                     handleLogin(loginDetails);
                 },
                 (errors) => {
-                    setErrors(errors);
+                    setLoginLoading(false);
+                    setErrors(normalizeErrors(errors));
                 }
             );
         }
@@ -249,12 +278,24 @@ const LoginViewForm = (props) => {
         browserClient.getConfig().then(onNewConfigLoaded);
     }, []);
 
-    React.useEffect(() => {
-        requirementCheckMfa(multifactors);
-    }, [multifactors]);
-
-
+/*    React.useEffect(() => {
+        // Only check MFA requirements if login is actually in progress
+        if (loginInProgress) {
+            requirementCheckMfa(multifactors);
+        }
+    }, [multifactors, loginInProgress]);
+*/
     const handleLogin = (loginDetails) => {
+        // Check if OIDC user needs to set up their vault
+        if (loginDetails.hasOwnProperty('needs_setup') && loginDetails.needs_setup) {
+            setLoginLoading(false);
+            setOidcSetupData(loginDetails);
+            return;
+        }
+        
+        // Mark login as in progress so the MFA useEffect can run
+        setLoginInProgress(true);
+        
         if (loginDetails.hasOwnProperty("required_multifactors")) {
             const requiredMultifactors = loginDetails["required_multifactors"];
             action().setHasTwoFactor(requiredMultifactors.length > 0);
@@ -267,14 +308,58 @@ const LoginViewForm = (props) => {
 
     const decryptData = () => {
         const loginDetails = decryptLoginDataFunction(password);
+        if (loginDetails.hasOwnProperty('require_password')) {
+            // Decryption failed - wrong password
+            setErrors(['PASSWORD_INCORRECT']);
+            return;
+        }
+        // Decryption succeeded - proceed with login
+        setDecryptLoginDataFunction(null);
+        setLoginInProgress(true);
         if (loginDetails.hasOwnProperty("required_multifactors")) {
             const requiredMultifactors = loginDetails["required_multifactors"];
             action().setHasTwoFactor(requiredMultifactors.length > 0);
             setMultifactors(requiredMultifactors);
+            // Directly call requirementCheckMfa to proceed
+            requirementCheckMfa(requiredMultifactors);
+        } else {
+            // No MFA required, complete login
+            requirementCheckMfa([]);
         }
-        if (loginDetails.hasOwnProperty('require_password')) {
-            setErrors(['PASSWORD_INCORRECT'])
+    };
+
+    const handleOidcSetup = () => {
+        // Validate passwords
+        if (!setupPassword || setupPassword.length < 8) {
+            setErrors(['PASSWORD_TOO_SHORT']);
+            return;
         }
+        if (setupPassword !== setupPasswordConfirm) {
+            setErrors(['PASSWORDS_DONT_MATCH']);
+            return;
+        }
+        
+        setErrors([]);
+        setLoginLoading(true);
+        
+        user.oidcSetupKeys(oidcSetupData, setupPassword).then(
+            (loginDetails) => {
+                setLoginLoading(false);
+                setOidcSetupData(null);
+                handleLogin(loginDetails);
+            },
+            (errors) => {
+                setLoginLoading(false);
+                setErrors(normalizeErrors(errors));
+            }
+        );
+    };
+
+    const cancelOidcSetup = () => {
+        setOidcSetupData(null);
+        setSetupPassword("");
+        setSetupPasswordConfirm("");
+        setErrors([]);
     };
 
     const hasLdapAuth = (serverCheck) => {
@@ -496,13 +581,7 @@ const LoginViewForm = (props) => {
                     handleLogin,
                     (result) => {
                         setLoginLoading(false);
-                        if (result.hasOwnProperty("non_field_errors")) {
-                            const errors = result.non_field_errors;
-                            setErrors(errors);
-                        } else {
-                            console.log(result);
-                            setErrors([result]);
-                        }
+                        setErrors(normalizeErrors(result));
                     }
                 );
             } else {
@@ -517,13 +596,7 @@ const LoginViewForm = (props) => {
                 handleLogin,
                 (result) => {
                     setLoginLoading(false);
-                    if (result.hasOwnProperty("non_field_errors")) {
-                        const errors = result.non_field_errors;
-                        setErrors(errors);
-                    } else {
-                        console.log(result);
-                        setErrors([result]);
-                    }
+                    setErrors(normalizeErrors(result));
                 }
             );
         }
@@ -589,6 +662,7 @@ const LoginViewForm = (props) => {
         setPassword("");
         setErrors([]);
         setLoginLoading(false);
+        setLoginInProgress(false);
         setDecryptLoginDataFunction(null);
     };
 
@@ -600,19 +674,8 @@ const LoginViewForm = (props) => {
             handleLogin,
             (result) => {
                 setLoginLoading(false);
-                if (result.hasOwnProperty("non_field_errors")) {
-                    const errors = result.non_field_errors;
-                    setView("default");
-                    setErrors(errors);
-                } else if (result.hasOwnProperty("errors")) {
-                    const errors = result.errors;
-                    setView("default");
-                    setErrors(errors);
-                } else {
-                    console.log(result);
-                    setView("default");
-                    setErrors([result]);
-                }
+                setView("default");
+                setErrors(normalizeErrors(result));
             }
         );
     };
@@ -752,31 +815,21 @@ const LoginViewForm = (props) => {
                                     user.oidcLogin(oidcTokenid).then(
                                         handleLogin,
                                         (errors) => {
-                                            setErrors(errors);
+                                            setLoginLoading(false);
+                                            setErrors(normalizeErrors(errors));
                                         }
                                     );
                                 }
                             });
                         }, (result) => {
                             setLoginLoading(false);
-                            console.log(result);
+                            setErrors(normalizeErrors(result));
                         });
                     }
                 },
                 (result) => {
-                    if (result.hasOwnProperty("errors")) {
-                        let errors = result.errors;
-                        setLoginLoading(false);
-                        setErrors(errors);
-                    } else if (typeof (result) === 'object') {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors(["RECEIVED_MALFORMED_RESPONSE"]);
-                    } else {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors([result]);
-                    }
+                    setLoginLoading(false);
+                    setErrors(normalizeErrors(result));
                 }
             )
             .catch((result) => {
@@ -806,31 +859,21 @@ const LoginViewForm = (props) => {
                                     user.samlLogin(samlTokenid).then(
                                         handleLogin,
                                         (errors) => {
-                                            setErrors(errors);
+                                            setLoginLoading(false);
+                                            setErrors(normalizeErrors(errors));
                                         }
                                     );
                                 }
                             });
                         }, (result) => {
                             setLoginLoading(false);
-                            console.log(result);
+                            setErrors(normalizeErrors(result));
                         });
                     }
                 },
                 (result) => {
-                    if (result.hasOwnProperty("errors")) {
-                        let errors = result.errors;
-                        setLoginLoading(false);
-                        setErrors(errors);
-                    } else if (typeof (result) === 'object') {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors(["RECEIVED_MALFORMED_RESPONSE"]);
-                    } else {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors([result]);
-                    }
+                    setLoginLoading(false);
+                    setErrors(normalizeErrors(result));
                 }
             )
             .catch((result) => {
@@ -868,27 +911,13 @@ const LoginViewForm = (props) => {
                     }
                 },
                 (result) => {
-                    if (result.hasOwnProperty("errors")) {
-                        setLoginLoading(false);
-                        setErrors(result.errors);
-                    } else if (result.hasOwnProperty("data") && result.data.hasOwnProperty("non_field_errors")) {
-                        setLoginLoading(false);
-                        setErrors(result.data.non_field_errors);
-                    } else if (typeof (result) === 'object') {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors(["RECEIVED_MALFORMED_RESPONSE"]);
-                    } else {
-                        console.log(result);
-                        setLoginLoading(false);
-                        setErrors([result]);
-                    }
+                    setLoginLoading(false);
+                    setErrors(normalizeErrors(result));
                 }
             )
             .catch((result) => {
                 setLoginLoading(false);
-                console.log(result);
-                // return Promise.reject(result);
+                setErrors(normalizeErrors(result));
             });
     };
     const redirectRegister = () => {
@@ -897,7 +926,83 @@ const LoginViewForm = (props) => {
 
     let formContent;
 
-    if (decryptLoginDataFunction !== null) {
+    if (oidcSetupData !== null) {
+        // OIDC user needs to set up their vault password
+        formContent = (
+            <>
+                <Grid container>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <MuiAlert
+                            severity="info"
+                            style={{
+                                marginBottom: "5px",
+                                marginTop: "5px",
+                            }}
+                        >
+                            {t("SETUP_YOUR_VAULT_PASSWORD")}
+                        </MuiAlert>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <p style={{ marginBottom: "10px", color: "#666" }}>
+                            {t("OIDC_SETUP_INSTRUCTIONS")}
+                        </p>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <TextField
+                            className={classes.textField}
+                            variant="outlined"
+                            margin="dense" size="small"
+                            id="setupPassword"
+                            label={t("PASSWORD")}
+                            InputProps={{
+                                type: "password",
+                            }}
+                            name="setupPassword"
+                            autoComplete="new-password"
+                            value={setupPassword}
+                            onChange={(event) => {
+                                setSetupPassword(event.target.value);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <TextField
+                            className={classes.textField}
+                            variant="outlined"
+                            margin="dense" size="small"
+                            id="setupPasswordConfirm"
+                            label={t("PASSWORD_REPEAT")}
+                            InputProps={{
+                                type: "password",
+                            }}
+                            name="setupPasswordConfirm"
+                            autoComplete="new-password"
+                            value={setupPasswordConfirm}
+                            onChange={(event) => {
+                                setSetupPasswordConfirm(event.target.value);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12} style={{ marginTop: "5px", marginBottom: "5px" }}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOidcSetup}
+                            type="submit"
+                            disabled={loginLoading}
+                            style={{ marginRight: "10px" }}
+                        >
+                            {loginLoading ? t("SETTING_UP") : t("CREATE_VAULT")}
+                        </Button>
+                        <Button onClick={cancelOidcSetup} disabled={loginLoading}>
+                            <span className={classes.regularButtonText}>{t("CANCEL")}</span>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <GridContainerErrors errors={errors} setErrors={setErrors} />
+            </>
+        )
+    } else if (decryptLoginDataFunction !== null) {
         formContent = (
             <>
                 <Grid container>
@@ -951,6 +1056,7 @@ const LoginViewForm = (props) => {
     } else if (view === "default") {
         formContent = (
             <>
+          
                 <div className={classes.borderSection}>
                 {oidcProvider.map((provider, i) => {
                     const initiateOidcLoginHelper = () => {

@@ -174,11 +174,64 @@ function oidcLogin(oidcTokenId) {
     const password = '';
 
     const onSuccess = function (response) {
+        // First decrypt the response to check for needs_setup
+        const decrypted_response_data = JSON.parse(
+            cryptoLibrary.decryptDataPublicKey(
+                response.data.login_info,
+                response.data.login_info_nonce,
+                serverPublicKey,
+                sessionKeys.private_key
+            )
+        );
+        
+        // Check if user needs to set up their vault
+        if (decrypted_response_data.needs_setup) {
+            return {
+                'needs_setup': true,
+                'setup_token_id': decrypted_response_data.setup_token_id,
+                'user_sauce': decrypted_response_data.user_sauce,
+                'hashing_algorithm': decrypted_response_data.hashing_algorithm,
+                'hashing_parameters': decrypted_response_data.hashing_parameters,
+                'username': decrypted_response_data.username,
+                'oidc_token_id': oidcTokenId,
+            };
+        }
+        
         return handleLoginResponse(response, password, sessionKeys, serverPublicKey, 'OIDC');
     };
 
     const onError = function (response) {
-        return Promise.reject(response.data.non_field_errors);
+        // Ensure we always return an array
+        let errors = [];
+        if (response && response.data) {
+            if (response.data.non_field_errors) {
+                errors = Array.isArray(response.data.non_field_errors) 
+                    ? response.data.non_field_errors 
+                    : [response.data.non_field_errors];
+            } else if (response.data.error) {
+                errors = Array.isArray(response.data.error) 
+                    ? response.data.error 
+                    : [response.data.error];
+            } else {
+                // Try to extract errors from response.data
+                const errorKeys = Object.keys(response.data);
+                if (errorKeys.length > 0) {
+                    errorKeys.forEach(key => {
+                        const fieldErrors = response.data[key];
+                        if (Array.isArray(fieldErrors)) {
+                            errors = errors.concat(fieldErrors);
+                        } else if (fieldErrors) {
+                            errors.push(fieldErrors);
+                        }
+                    });
+                }
+            }
+        }
+        // If still no errors, use a generic error
+        if (errors.length === 0) {
+            errors = ['LOGIN_FAILED'];
+        }
+        return Promise.reject(errors);
     };
 
     let login_info = {
@@ -201,6 +254,88 @@ function oidcLogin(oidcTokenId) {
 
     return apiClient
         .oidcLogin(loginInfoEnc["text"], loginInfoEnc["nonce"], sessionKeys.public_key, sessionDuration)
+        .then(onSuccess, onError);
+}
+
+/**
+ * Sets up encryption keys for a new OIDC user
+ * Called after user chooses a vault password during first login
+ *
+ * @param {object} setupData The setup data from oidcLogin response
+ * @param {string} password The user-chosen vault password
+ *
+ * @returns {Promise}
+ */
+function oidcSetupKeys(setupData, password) {
+    const { setup_token_id, user_sauce, hashing_algorithm, hashing_parameters } = setupData;
+    
+    console.log("DEBUG oidcSetupKeys - setupData:", {
+        setup_token_id,
+        user_sauce,
+        hashing_algorithm,
+        hashing_parameters,
+        password: password ? '[SET]' : '[EMPTY]'
+    });
+    
+    const serverPublicKey = getStore().getState().server.publicKey;
+    const sessionKeys = cryptoLibrary.generatePublicPrivateKeypair();
+    
+    // Generate keypair and secret key
+    const pair = cryptoLibrary.generatePublicPrivateKeypair();
+    const secretKey = cryptoLibrary.generateSecretKey();
+    
+    // Encrypt private key and secret key with user's password
+    const privateKeyEncrypted = cryptoLibrary.encryptSecret(
+        pair.private_key, 
+        password, 
+        user_sauce, 
+        hashing_algorithm, 
+        hashing_parameters
+    );
+    console.log("DEBUG oidcSetupKeys - encrypted private key:", {
+        text: privateKeyEncrypted.text,
+        nonce: privateKeyEncrypted.nonce
+    });
+    const secretKeyEncrypted = cryptoLibrary.encryptSecret(
+        secretKey, 
+        password, 
+        user_sauce, 
+        hashing_algorithm, 
+        hashing_parameters
+    );
+    
+    let sessionDuration = 24 * 60 * 60;
+    const trustDevice = getStore().getState().user.trustDevice;
+    if (trustDevice) {
+        sessionDuration = 24 * 60 * 60 * 30;
+    }
+    
+    const onSuccess = function (response) {
+        // Setup endpoint now returns a full login response
+        return handleLoginResponse(response, password, sessionKeys, serverPublicKey, 'OIDC');
+    };
+    
+    const onError = function (response) {
+        let errors = ['SETUP_FAILED'];
+        if (response && response.data && response.data.error) {
+            errors = [response.data.error];
+        }
+        return Promise.reject(errors);
+    };
+    
+    return apiClient
+        .oidcSetupKeys(
+            setup_token_id,
+            pair.public_key,
+            privateKeyEncrypted.text,
+            privateKeyEncrypted.nonce,
+            secretKeyEncrypted.text,
+            secretKeyEncrypted.nonce,
+            sessionKeys.public_key,
+            sessionDuration,
+            device.getDeviceFingerprint(),
+            device.getDeviceDescription()
+        )
         .then(onSuccess, onError);
 }
 
@@ -393,6 +528,7 @@ function handleLoginResponse(response, password, sessionKeys, serverPublicKey, d
     action().sethashingParameters(decrypted_response_data.user['hashing_algorithm'], decrypted_response_data.user['hashing_parameters'])
 
     sessionPassword = (password || !decrypted_response_data.hasOwnProperty("password")) ? password : decrypted_response_data.password;
+    console.log("DEBUG handleLoginResponse - sessionPassword:", sessionPassword ? '[SET]' : '[EMPTY]', "password param:", password ? '[SET]' : '[EMPTY]');
 
     // decrypt the session key
     let sessionSecretKey = decrypted_response_data.session_secret_key;
@@ -411,6 +547,14 @@ function handleLoginResponse(response, password, sessionKeys, serverPublicKey, d
     try {
         // decrypt user private key which may fail if the user server's password isn't correct and the user
         // needs to enter one
+        console.log("DEBUG decryptSecret params:", {
+            private_key: decrypted_response_data.user.private_key,
+            private_key_nonce: decrypted_response_data.user.private_key_nonce,
+            sessionPassword: sessionPassword ? '[SET]' : '[EMPTY]',
+            user_sauce: decrypted_response_data.user.user_sauce,
+            hashing_algorithm: decrypted_response_data.user.hashing_algorithm,
+            hashing_parameters: decrypted_response_data.user.hashing_parameters,
+        });
         user_private_key = cryptoLibrary.decryptSecret(
             decrypted_response_data.user.private_key,
             decrypted_response_data.user.private_key_nonce,
@@ -419,7 +563,9 @@ function handleLoginResponse(response, password, sessionKeys, serverPublicKey, d
             decrypted_response_data.user.hashing_algorithm,
             decrypted_response_data.user.hashing_parameters,
         );
+        console.log("DEBUG decryptSecret succeeded");
     } catch (error) {
+        console.log("DEBUG decryptSecret FAILED:", error);
         return {
             'require_password': (password) => handleLoginResponse(response, password, sessionKeys, serverPublicKey, defaultAuthentication)
         }
@@ -1310,6 +1456,7 @@ const userService = {
     initiateSamlLogin,
     getSamlRedirectUrl,
     oidcLogin,
+    oidcSetupKeys,
     initiateOidcLogin,
     getOidcRedirectUrl,
     login,
