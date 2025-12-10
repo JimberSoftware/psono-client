@@ -24,6 +24,7 @@ import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import ConfigLogo from "./config-logo";
 
 import RuleIcon from "./icons/Rule";
 import browserClient from "../services/browser-client";
@@ -48,33 +49,42 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         backgroundColor: theme.palette.blueBackground.main,
         color: theme.palette.lightGreyText.main,
+        boxShadow: "2px 0 12px rgba(0,0,0,0.04)",
+        paddingTop: theme.mixins.toolbar?.minHeight || 64,
+    },
+    logoWrap: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        padding: theme.spacing(2, 2, 1, 2),
+        minHeight: 64,
     },
     listItemRootActive: {
         "&:hover": {
             backgroundColor: theme.palette.lightBackground.main,
-            color: theme.palette.blueBackground.main,
+            color: theme.palette.primary.main,
         },
         "&.Mui-selected": {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.lightBackground.main,
+            backgroundColor: theme.palette.lightBackground.main,
+            color: theme.palette.primary.main,
             "& .MuiListItemIcon-root": {
-                color: theme.palette.lightBackground.main,
+                color: theme.palette.primary.main,
             },
         },
     },
     listItemRoot: {
         "&:hover": {
             backgroundColor: theme.palette.lightBackground.main,
-            color: theme.palette.blueBackground.main,
+            color: theme.palette.primary.main,
             "& .MuiListItemIcon-root": {
-                color: theme.palette.blueBackground.main,
+                color: theme.palette.primary.main,
             },
         },
         "&.Mui-selected": {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.lightBackground.main,
+            backgroundColor: theme.palette.lightBackground.main,
+            color: theme.palette.primary.main,
             "& .MuiListItemIcon-root": {
-                color: theme.palette.lightBackground.main,
+                color: theme.palette.primary.main,
             },
         },
     },
@@ -168,6 +178,9 @@ const Sidebar = (props) => {
 
     const drawer = (
         <div>
+            {isSmUp && <div className={classes.logoWrap}>
+                <ConfigLogo configKey={'logo'} defaultLogo={'img/jimberlogo.svg'} height="34px" />
+            </div>}
             {isSmUp && <div className={classes.toolbar} />}
             <List>
                 <ListSubheader className={classes.subHeader}>{t("NAVIGATION")}</ListSubheader>

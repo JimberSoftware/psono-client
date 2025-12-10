@@ -14,29 +14,29 @@ import action from "../actions/bound-action-creators";
 const theme = {
     "palette": {
         "background": {
-            "default": "#0f1118",
-            "paper": "#fff"
+            "default": "#ffffff",
+            "paper": "#ffffff"
         },
         "primary": {
-            "main": "#2dbb93"
+            "main": "#232483"
         },
         "secondary": {
-            "main": "#0b4a23"
+            "main": "#59c3c3"
         },
         "action": {
-            "disabledBackground": "#2dbb9380"
+            "disabledBackground": "#59c3c380"
         },
         "lightGreyText": {
-            "main": "#b1b6c1",
-            "light": "#b1b6c1",
-            "dark": "#b1b6c1",
-            "contrastText": "#b1b6c1"
+            "main": "#444d5d",
+            "light": "#444d5d",
+            "dark": "#444d5d",
+            "contrastText": "#444d5d"
         },
         "greyText": {
-            "main": "#666",
-            "light": "#666",
-            "dark": "#666",
-            "contrastText": "#666"
+            "main": "#5a6380",
+            "light": "#5a6380",
+            "dark": "#5a6380",
+            "contrastText": "#5a6380"
         },
         "checked": {
             "main": "#9c27b0",
@@ -45,34 +45,34 @@ const theme = {
             "contrastText": "#9c27b0"
         },
         "blueBackground": {
-            "main": "#151f2b",
-            "light": "#151f2b",
-            "dark": "#151f2b",
-            "contrastText": "#151f2b"
+            "main": "#f7fbfb",
+            "light": "#f7fbfb",
+            "dark": "#f7fbfb",
+            "contrastText": "#f7fbfb"
         },
         "badgeBackground": {
-            "main": "#777",
-            "light": "#777",
-            "dark": "#777",
-            "contrastText": "#777"
+            "main": "#59c3c3",
+            "light": "#59c3c3",
+            "dark": "#59c3c3",
+            "contrastText": "#ffffff"
         },
         "appBarText": {
-            "main": "#777",
-            "light": "#777",
-            "dark": "#777",
-            "contrastText": "#777"
+            "main": "#444d5d",
+            "light": "#444d5d",
+            "dark": "#444d5d",
+            "contrastText": "#444d5d"
         },
         "appBarReadOnlyText": {
-            "main": "#777",
-            "light": "#777",
-            "dark": "#777",
-            "contrastText": "#777"
+            "main": "#444d5d",
+            "light": "#444d5d",
+            "dark": "#444d5d",
+            "contrastText": "#444d5d"
         },
         "appBarReadOnlyBackground": {
-            "main": "#fad8a6",
-            "light": "#fad8a6",
-            "dark": "#fad8a6",
-            "contrastText": "#fad8a6"
+            "main": "#def3f3",
+            "light": "#def3f3",
+            "dark": "#def3f3",
+            "contrastText": "#def3f3"
         },
         "appBarBackground": {
             "main": "#fff",
@@ -81,22 +81,22 @@ const theme = {
             "contrastText": "#fff"
         },
         "baseBackground": {
-            "main": "#ebeeef",
-            "light": "#ebeeef",
-            "dark": "#ebeeef",
-            "contrastText": "#ebeeef"
+            "main": "#ffffff",
+            "light": "#ffffff",
+            "dark": "#ffffff",
+            "contrastText": "#ffffff"
         },
         "lightBackground": {
-            "main": "#fff",
-            "light": "#fff",
-            "dark": "#fff",
-            "contrastText": "#fff"
+            "main": "#def3f3",
+            "light": "#def3f3",
+            "dark": "#def3f3",
+            "contrastText": "#def3f3"
         },
         "baseTitleBackground": {
-            "main": "#f2f5f7",
-            "light": "#f2f5f7",
-            "dark": "#f2f5f7",
-            "contrastText": "#f2f5f7"
+            "main": "#f7fbfb",
+            "light": "#f7fbfb",
+            "dark": "#f7fbfb",
+            "contrastText": "#f7fbfb"
         }
     },
     "typography": {

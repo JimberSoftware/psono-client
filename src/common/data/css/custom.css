@@ -1,23 +1,26 @@
-/* Jimber branding overrides - matching jimber.io */
+/* Jimber branding overrides - light theme to match Jimber UI */
 :root {
-  /* Main backgrounds - dark navy like jimber.io */
-  --jimber-bg: #0b1120;
-  --jimber-bg-darker: #060b14;
-  --jimber-panel: #111827;
-  --jimber-panel-lighter: #1f2937;
-  --jimber-border: #1e293b;
+  /* Main backgrounds */
+  --jimber-bg: #ffffff;
+  --jimber-bg-darker: #f0f7f7;
+  --jimber-bg-soft: #f7fbfb;
+  --jimber-panel: #ffffff;
+  --jimber-panel-lighter: #def3f3;
+  --jimber-border: #d7ecec;
   
   /* Text colors */
-  --jimber-text: #f1f5f9;
-  --jimber-text-muted: #94a3b8;
-  --jimber-text-dim: #64748b;
+  --jimber-text: #444d5d;
+  --jimber-text-muted: #5a6380;
+  --jimber-text-dim: #7a83a3;
+  --jimber-text-strong: #232483;
   
-  /* Jimber teal accent - from jimber.io */
-  --jimber-accent: #14b8a6;
-  --jimber-accent-hover: #0d9488;
-  --jimber-accent-light: #2dd4bf;
-  --jimber-accent-glow: rgba(20, 184, 166, 0.15);
-  --jimber-accent-glow-strong: rgba(20, 184, 166, 0.3);
+  /* Jimber teal accent */
+  --jimber-accent: #59c3c3;
+  --jimber-accent-hover: #44afaf;
+  --jimber-accent-light: #82d8d8;
+  --jimber-accent-glow: rgba(89, 195, 195, 0.18);
+  --jimber-accent-glow-strong: rgba(89, 195, 195, 0.32);
+  --jimber-selected: #232483;
 }
 
 /* ============================================
@@ -29,7 +32,7 @@ html, body {
 }
 
 body.loading {
-  background: var(--jimber-bg) !important;
+  background: var(--jimber-bg-soft) !important;
 }
 
 /* ============================================
@@ -49,6 +52,7 @@ body.loading {
   background: var(--jimber-panel) !important;
   border: 1px solid var(--jimber-border) !important;
   color: var(--jimber-text) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Dark box (login panel) */
@@ -70,10 +74,10 @@ textarea,
 .MuiOutlinedInput-root,
 .MuiFilledInput-root,
 .MuiInput-root {
-  background: var(--jimber-bg-darker) !important;
+  background: var(--jimber-bg-soft) !important;
   border: 1px solid var(--jimber-border) !important;
   color: var(--jimber-text) !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
 }
 
 /* Input hover */
@@ -110,7 +114,7 @@ label {
 
 .MuiInputLabel-root.Mui-focused,
 .MuiFormLabel-root.Mui-focused {
-  color: var(--jimber-accent) !important;
+  color: var(--jimber-text) !important;
 }
 
 .MuiInputAdornment-root,
@@ -135,9 +139,9 @@ button,
 .MuiButton-containedPrimary {
   background: var(--jimber-accent) !important;
   border: none !important;
-  color: #0b1120 !important;
+  color: var(--jimber-text) !important;
   font-weight: 600 !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   text-transform: none !important;
   transition: all 0.2s ease !important;
 }
@@ -151,6 +155,16 @@ button:hover,
   box-shadow: 0 4px 12px var(--jimber-accent-glow-strong) !important;
 }
 
+/* Active / selected buttons */
+button:active,
+.btn:active,
+.btn-primary:active,
+.MuiButton-root:active,
+.MuiButton-containedPrimary:active {
+  background: var(--jimber-selected) !important;
+  color: #ffffff !important;
+}
+
 /* Secondary/outlined buttons */
 .btn-secondary,
 .btn-outline,
@@ -161,13 +175,17 @@ button:hover,
   color: var(--jimber-text) !important;
 }
 
+.MuiButtonGroup-root > .MuiButton-root + .MuiButton-root {
+  margin-left: 8px !important; /* small space between grouped buttons */
+}
+
 .btn-secondary:hover,
 .btn-outline:hover,
 .MuiButton-outlined:hover,
 .MuiButton-text:hover {
   background: var(--jimber-panel-lighter) !important;
   border-color: var(--jimber-accent) !important;
-  color: var(--jimber-accent) !important;
+  color: var(--jimber-accent-hover) !important;
 }
 
 /* ============================================
@@ -214,21 +232,21 @@ a:hover,
 
 .MuiListItem-root {
   color: var(--jimber-text-muted) !important;
-  border-radius: 6px !important;
-  margin: 2px 8px !important;
+  border-radius: 10px !important;
+  margin: 4px 10px !important;
   transition: all 0.2s ease !important;
 }
 
 .MuiListItem-root:hover {
-  background: var(--jimber-accent-glow) !important;
-  color: var(--jimber-text) !important;
+  background: var(--jimber-panel-lighter) !important;
+  color: var(--jimber-selected) !important;
 }
 
 .MuiListItem-root.Mui-selected,
 .MuiListItem-root.Mui-selected:hover {
-  background: var(--jimber-accent-glow-strong) !important;
-  color: var(--jimber-accent) !important;
-  border-left: 3px solid var(--jimber-accent) !important;
+  background: var(--jimber-panel-lighter) !important;
+  color: var(--jimber-selected) !important;
+  border-left: 4px solid var(--jimber-selected) !important;
 }
 
 /* ============================================
@@ -255,16 +273,37 @@ a:hover .fa {
 .MuiTableCell-root {
   border-color: var(--jimber-border) !important;
   color: var(--jimber-text) !important;
+  padding: 10px 16px !important;
+  vertical-align: middle !important;
+  overflow: visible !important;
 }
 
 .MuiTableCell-head {
-  background: var(--jimber-bg-darker) !important;
+  background: var(--jimber-panel-lighter) !important;
   color: var(--jimber-text-muted) !important;
   font-weight: 600 !important;
+  overflow: visible !important;
+  padding: 12px 16px !important;
+  vertical-align: middle !important;
+}
+
+.MuiTableSortLabel-root {
+  overflow: visible !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.MuiTableRow-head {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+.MuiTableRow-root {
+  height: auto !important;
 }
 
 .MuiTableRow-root:hover {
-  background: var(--jimber-accent-glow) !important;
+  background: var(--jimber-panel-lighter) !important;
 }
 
 /* ============================================
@@ -276,11 +315,11 @@ a:hover .fa {
 }
 
 .MuiTab-root.Mui-selected {
-  color: var(--jimber-accent) !important;
+  color: var(--jimber-selected) !important;
 }
 
 .MuiTabs-indicator {
-  background-color: var(--jimber-accent) !important;
+  background-color: var(--jimber-selected) !important;
 }
 
 /* ============================================
@@ -354,12 +393,12 @@ a:hover .fa {
 }
 
 .MuiDialogTitle-root {
-  background: var(--jimber-bg-darker) !important;
+  background: var(--jimber-bg-soft) !important;
   border-bottom: 1px solid var(--jimber-border) !important;
 }
 
 .MuiDialogActions-root {
-  background: var(--jimber-bg-darker) !important;
+  background: var(--jimber-bg-soft) !important;
   border-top: 1px solid var(--jimber-border) !important;
 }
 
@@ -394,7 +433,7 @@ a:hover .fa {
    SELECTION
    ============================================ */
 ::selection {
-  background: var(--jimber-accent-glow-strong);
+  background: var(--jimber-panel-lighter);
   color: var(--jimber-text);
 }
 

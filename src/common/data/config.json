@@ -1,6 +1,6 @@
 {
-  "logo": "img/logo.svg",
-  "logo_inverse": "img/logo.svg",
+  "logo": "img/jimberlogo.svg",
+  "logo_inverse": "img/jimberlogo.svg",
   "backend_servers": [{
     "title": "Local Dev",
     "url": "http://localhost:10100"

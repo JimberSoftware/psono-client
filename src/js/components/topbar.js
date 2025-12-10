@@ -145,6 +145,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',  // Align text and button vertically
         marginRight: theme.spacing(2), // Adds some spacing between this text and whatever comes next
+        marginLeft: "auto", // push to the right side
     },
 }));
 
@@ -251,7 +252,7 @@ const Topbar = (props) => {
     return (
         <AppBar position="fixed" className={settingsDatastore.noSaveMode ? classes.appBarReadOnly : classes.appBar}>
             <FrameControls />
-            <Container maxWidth="lg">
+            <Container maxWidth={false} sx={{ paddingLeft: "24px", paddingRight: "24px" }}>
                 <Toolbar
                     disableGutters={true}
                     className={classes.toolbar}
@@ -265,9 +266,11 @@ const Topbar = (props) => {
                         size="large">
                         <MenuIcon />
                     </IconButton>
-                    <a className={classes.topLogo} href="index.html">
-                        <ConfigLogo configKey={'logo_inverse'} defaultLogo={'img/logo-inverse.png'} height="100%" />
-                    </a>
+                    <Hidden smUp>
+                        <a className={classes.topLogo} href="index.html">
+                            <ConfigLogo configKey={'logo'} defaultLogo={'img/jimberlogo.svg'} height="100%" />
+                        </a>
+                    </Hidden>
                     <div style={{ width: "100%" }}>
                         {datastores && datastores.length > 1 && (<div style={{float: "left"}}>
                             <Hidden smUp>
