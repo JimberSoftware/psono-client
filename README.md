@@ -1,3 +1,40 @@
+# Jimber Client Psono Client
+
+## Description
+
+password manager client: the web-based frontend application built with React and Material-UI. The client connects to the Jimber psono Server and provides a user interface for managing passwords, secure sharing, and authentication via the Jimber OIDC Identity Provider.
+
+## Quick Start
+
+```bash
+cd /psono-client
+npm install
+npm run dev
+```
+
+## Port Information
+
+- **Port**: `9000`
+- **URL**: `http://localhost:9000`
+- **Note**: Webpack dev server with hot reload enabled
+
+## Development
+
+- **Start development server**: `npm run dev`
+- **Build for Chrome extension**: `npm run buildchrome`
+- **Build for Firefox extension**: `npm run buildfirefox`
+- **Build for web client**: `npm run buildwebclient`
+- **Build for Electron**: `npm run buildelectron`
+
+## Tech Stack
+
+- **Framework**: React 17
+- **UI Library**: Material-UI (MUI)
+- **Build Tool**: Webpack
+- **State Management**: Redux
+
+---
+
 # PSONO Client - Password Manager
 
 [![coverage report](https://gitlab.com/esaqa/psono/psono-client/badges/master/coverage.svg)](https://gitlab.com/esaqa/psono/psono-client/commits/master)
