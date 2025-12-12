@@ -9,18 +9,21 @@
   --jimber-border: #d7ecec;
   
   /* Text colors */
-  --jimber-text: #444d5d;
-  --jimber-text-muted: #5a6380;
-  --jimber-text-dim: #7a83a3;
-  --jimber-text-strong: #232483;
+  --jimber-text: #374151;
+  --jimber-text-muted: #374151;
+  --jimber-text-dim: #6b7280;
+  --jimber-text-strong: #090a70;
   
-  /* Jimber teal accent */
-  --jimber-accent: #59c3c3;
-  --jimber-accent-hover: #44afaf;
-  --jimber-accent-light: #82d8d8;
-  --jimber-accent-glow: rgba(89, 195, 195, 0.18);
-  --jimber-accent-glow-strong: rgba(89, 195, 195, 0.32);
-  --jimber-selected: #232483;
+  /* Jimber dark blue accent */
+  --jimber-accent: #090a70;
+  --jimber-accent-hover: #090a70;
+  --jimber-accent-light: #090a70;
+  --jimber-accent-glow: rgba(9, 10, 112, 0.1);
+  --jimber-accent-glow-strong: rgba(9, 10, 112, 0.15);
+  --jimber-selected: #090a70;
+  
+  /* Hover background */
+  --jimber-hover-bg: #def3f3;
 }
 
 /* ============================================
@@ -137,9 +140,9 @@ button,
 .btn-primary,
 .MuiButton-root,
 .MuiButton-containedPrimary {
-  background: var(--jimber-accent) !important;
+  background: transparent !important;
   border: none !important;
-  color: var(--jimber-text) !important;
+  color: #374151 !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
   text-transform: none !important;
@@ -151,8 +154,8 @@ button:hover,
 .btn-primary:hover,
 .MuiButton-root:hover,
 .MuiButton-containedPrimary:hover {
-  background: var(--jimber-accent-hover) !important;
-  box-shadow: 0 4px 12px var(--jimber-accent-glow-strong) !important;
+  background: #def3f3 !important;
+  box-shadow: none !important;
 }
 
 /* Active / selected buttons */
@@ -161,8 +164,8 @@ button:active,
 .btn-primary:active,
 .MuiButton-root:active,
 .MuiButton-containedPrimary:active {
-  background: var(--jimber-selected) !important;
-  color: #ffffff !important;
+  background: #def3f3 !important;
+  color: #374151 !important;
 }
 
 /* Secondary/outlined buttons */
@@ -172,7 +175,7 @@ button:active,
 .MuiButton-text {
   background: transparent !important;
   border: 1px solid var(--jimber-border) !important;
-  color: var(--jimber-text) !important;
+  color: #374151 !important;
 }
 
 .MuiButtonGroup-root > .MuiButton-root + .MuiButton-root {
@@ -183,9 +186,20 @@ button:active,
 .btn-outline:hover,
 .MuiButton-outlined:hover,
 .MuiButton-text:hover {
-  background: var(--jimber-panel-lighter) !important;
-  border-color: var(--jimber-accent) !important;
-  color: var(--jimber-accent-hover) !important;
+  background: #def3f3 !important;
+  border-color: var(--jimber-border) !important;
+  color: #374151 !important;
+}
+
+/* Icon buttons - transparent with hover */
+.MuiIconButton-root {
+  background: transparent !important;
+  color: #374151 !important;
+}
+
+.MuiIconButton-root:hover {
+  background: #def3f3 !important;
+  color: #374151 !important;
 }
 
 /* ============================================
@@ -260,37 +274,86 @@ a:hover,
 
 .MuiIconButton-root:hover .MuiSvgIcon-root,
 a:hover .fa {
-  color: var(--jimber-accent) !important;
+  color: #374151 !important;
+}
+
+/* Standardize icon button sizes in tables */
+.MuiTable-root .MuiIconButton-root,
+.MuiToolbar-root .MuiIconButton-root {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 8px !important;
 }
 
 /* ============================================
    TABLES
    ============================================ */
 .MuiTable-root {
-  background: var(--jimber-panel) !important;
+  background: #ffffff !important;
+  border: 1px solid #e3eded !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
 }
 
 .MuiTableCell-root {
-  border-color: var(--jimber-border) !important;
+  border-color: #e3eded !important;
   color: var(--jimber-text) !important;
-  padding: 10px 16px !important;
+  padding: 12px 16px !important;
   vertical-align: middle !important;
   overflow: visible !important;
+  background: transparent !important;
 }
 
 .MuiTableCell-head {
-  background: var(--jimber-panel-lighter) !important;
-  color: var(--jimber-text-muted) !important;
+  background: #f7fbfb !important;
+  color: #444d5d !important;
   font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
   overflow: visible !important;
-  padding: 12px 16px !important;
+  padding: 13px 16px !important;
   vertical-align: middle !important;
+  border-bottom: 1px solid #e3eded !important;
 }
 
 .MuiTableSortLabel-root {
   overflow: visible !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
+  color: inherit !important;
+  min-width: fit-content !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.MuiTableSortLabel-root .MuiTableSortLabel-icon {
+  margin-left: 4px !important;
+  opacity: 0.5 !important;
+}
+
+.MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+  opacity: 1 !important;
+}
+
+.MuiTableSortLabel-icon {
+  color: #9aa3b5 !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root .MuiButtonBase-root {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root .MuiButtonBase-root:hover {
+  background: #def3f3 !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  border-radius: 0 !important;
 }
 
 .MuiTableRow-head {
@@ -300,6 +363,14 @@ a:hover .fa {
 
 .MuiTableRow-root {
   height: auto !important;
+}
+
+.MuiTableBody-root .MuiTableRow-root:nth-of-type(even) {
+  background: #f7fbfb !important;
+}
+
+.MuiTableBody-root .MuiTableRow-root:hover {
+  background: #eef6f6 !important;
 }
 
 .MuiTableRow-root:hover {

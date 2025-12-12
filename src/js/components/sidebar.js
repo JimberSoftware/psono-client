@@ -347,7 +347,7 @@ const Sidebar = (props) => {
                     </List>
                 </>
             )}
-            <div className={classes.version}>PSONO: {version}</div>
+            <div className={classes.version}>Jimber: {version}</div>
         </div>
     );
 
