@@ -39,16 +39,7 @@ const BaseTitle = (props) => {
     const { children } = props;
     const { t } = useTranslation();
 
-    return (
-        <>
-            {/*<Paper elevation={0} className={classes.sessionExpirationTimer} square>*/}
-            {/*    {t("AUTOMATIC_SIGN_OFF_IN", {time: '00:00:00'})}*/}
-            {/*</Paper>*/}
-            <Paper elevation={0} className={classes.title} square>
-                {children}
-            </Paper>
-        </>
-    );
+    return <></>;
 };
 
 BaseTitle.propTypes = {

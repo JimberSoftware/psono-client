@@ -2,16 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from '@mui/styles';
 import Sidebar from "./sidebar";
-import Topbar from "./topbar";
 import deviceService from "../services/device";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
-    },
-    // necessary for content to be below app bar
-    toolbar: {
-        minHeight: deviceService.hasTitlebar() ? "82px" : "50px",
     },
     fullContent: {
         flexGrow: 1,
@@ -23,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.baseBackground.main,
         position: "absolute",
         paddingBottom: "30px",
+        paddingTop: "24px",
+        paddingLeft: "24px",
+        paddingRight: "24px",
     },
 }));
 
@@ -33,10 +31,8 @@ const Base = (props) => {
 
     return (
         <div className={classes.root}>
-            <Topbar {...props} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
             <Sidebar {...props} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
             <div className={classes.fullContent}>
-                <div className={classes.toolbar} />
                 <div className={classes.content}>{children}</div>
             </div>
         </div>
