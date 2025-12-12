@@ -6,11 +6,12 @@ import { useTranslation } from "react-i18next";
 import { alpha } from '@mui/system';
 import Drawer from "@mui/material/Drawer";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import HomeIcon from "@mui/icons-material/Home";
-import ShareIcon from "@mui/icons-material/Share";
-import PersonIcon from "@mui/icons-material/Person";
-import GroupIcon from "@mui/icons-material/Group";
-import LinkIcon from "@mui/icons-material/Link";
+import HomeIcon from "./icons/HomeIcon";
+import PendingRequestsIcon from "./icons/PendingRequestsIcon";
+import TrustedUsersIcon from "./icons/TrustedUsersIcon";
+import GroupsIcon from "./icons/GroupsIcon";
+import SecurityReportIcon from "./icons/SecurityReportIcon";
+import ActiveLinkSharesIcon from "./icons/ActiveLinkSharesIcon";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -42,7 +43,6 @@ import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import ConfigLogo from "./config-logo";
 
-import RuleIcon from "./icons/Rule";
 import browserClient from "../services/browser-client";
 import deviceService from "../services/device";
 import {getStore} from "../services/store";
@@ -363,7 +363,7 @@ const Sidebar = (props) => {
                                     : classes.listItemIcon
                             }`}
                         >
-                            <ShareIcon className={classes.icon} />
+                            <PendingRequestsIcon className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText
                             classes={{ primary: classes.listItemText }}
@@ -390,7 +390,7 @@ const Sidebar = (props) => {
                                 isSelected(/^\/share\/users$/) ? classes.listItemIconSelected : classes.listItemIcon
                             }`}
                         >
-                            <PersonIcon className={classes.icon} />
+                            <TrustedUsersIcon className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText classes={{ primary: classes.listItemText }} primary={t("TRUSTED_USERS")} />
                     </ListItem>
@@ -408,7 +408,7 @@ const Sidebar = (props) => {
                                 isSelected(/^\/groups$/) ? classes.listItemIconSelected : classes.listItemIcon
                             }`}
                         >
-                            <GroupIcon className={classes.icon} />
+                            <GroupsIcon className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText
                             classes={{ primary: classes.listItemText }}
@@ -435,7 +435,7 @@ const Sidebar = (props) => {
                                 isSelected(/^\/security-report$/) ? classes.listItemIconSelected : classes.listItemIcon
                             }`}
                         >
-                            <RuleIcon className={classes.icon} />
+                            <SecurityReportIcon className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText
                             classes={{ primary: classes.listItemText }}
@@ -466,7 +466,7 @@ const Sidebar = (props) => {
                                     : classes.listItemIcon
                             }`}
                         >
-                            <LinkIcon className={classes.icon} />
+                            <ActiveLinkSharesIcon className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText classes={{ primary: classes.listItemText }} primary={t("ACTIVE_LINK_SHARES")} />
                     </ListItem>
