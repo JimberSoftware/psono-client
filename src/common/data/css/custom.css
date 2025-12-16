@@ -462,31 +462,31 @@ a:hover .fa {
   border-radius: 12px !important;
 }
 
-/* Login phase dialog background - target the dark-box that contains login form */
-/* Target containers with login form elements using :has() selector */
-div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiButton-root):not(.MuiGrid-item):not(.MuiGrid-container),
-div:has(input#username):not(.MuiTextField-root):not(.MuiInputBase-root):not(.MuiGrid-item):not(.MuiGrid-container),
-.dark-box:has(button[id="sad"]),
-.dark-box:has(input#username),
-[class*="dark-box"]:has(button[id="sad"]),
-[class*="dark-box"]:has(input#username),
-[class*="DarkBox"]:has(button[id="sad"]),
-[class*="DarkBox"]:has(input#username) {
-  background: #111279 !important;
+/* Login phase dialog background - target ONLY the login page container, NOT dialogs */
+/* Target containers with login form elements using :has() selector, but exclude dialogs */
+div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root):not(.MuiButton-root):not(.MuiGrid-item):not(.MuiGrid-container):not([role="dialog"]),
+div:has(input#username):not(.MuiTextField-root):not(.MuiInputBase-root):not(.MuiGrid-item):not(.MuiGrid-container):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]),
+.dark-box:has(button[id="sad"]):not(.MuiDialog-paper),
+.dark-box:has(input#username):not(.MuiDialog-paper),
+[class*="dark-box"]:has(button[id="sad"]):not(.MuiDialog-paper),
+[class*="dark-box"]:has(input#username):not(.MuiDialog-paper),
+[class*="DarkBox"]:has(button[id="sad"]):not(.MuiDialog-paper),
+[class*="DarkBox"]:has(input#username):not(.MuiDialog-paper) {
+  background: #8dcfcf !important;
 }
 
-/* More specific: Target the login page container directly */
+/* More specific: Target the login page container directly, exclude dialogs */
 /* The DarkBox component wraps the login form, so target parent divs */
-body:not(.loading) > #app > div:has(button[id="sad"]),
-body:not(.loading) > #app > div:has(input#username),
-body:not(.loading) > div > div:has(button[id="sad"]):not(.MuiDialog-paper),
-body:not(.loading) > div > div:has(input#username):not(.MuiDialog-paper) {
-  background: #111279 !important;
+body:not(.loading) > #app > div:has(button[id="sad"]):not(.MuiDialog-root),
+body:not(.loading) > #app > div:has(input#username):not(.MuiDialog-root),
+body:not(.loading) > div > div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]),
+body:not(.loading) > div > div:has(input#username):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]) {
+  background: #8dcfcf !important;
 }
 
-/* Target by logo + button combination (login page structure) */
-div:has(img[src*="logo"]):has(button[id="sad"]) {
-  background: #111279 !important;
+/* Target by logo + button combination (login page structure), exclude dialogs */
+div:has(img[src*="logo"]):has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root) {
+  background: #8dcfcf !important;
 }
 
 .MuiDialogTitle-root {
@@ -544,28 +544,40 @@ div:has(img[src*="logo"]):has(button[id="sad"]) {
 
 /* ============================================
    HIDE REGULAR LOGIN FORM - OIDC ONLY
+   Only apply to login page, NOT dialogs
    ============================================ */
-/* Hide "OR" separators */
-.horizontalline,
-[class*="horizontalline"],
-p.horizontalline {
+/* Hide "OR" separators - but only within .borderSection (login form), not in dialogs */
+.borderSection .horizontalline,
+.borderSection [class*="horizontalline"],
+.borderSection p.horizontalline {
   display: none !important;
 }
 
-/* Hide username/password input fields */
-input#username,
-input#password {
+/* Hide username/password input fields - but only within .borderSection (login form), not in dialogs */
+.borderSection input#username,
+.borderSection input#password {
   display: none !important;
 }
 
-/* Hide username/password labels */
-label[for="username"],
-label[for="password"] {
+/* Hide username/password labels - but only within .borderSection (login form), not in dialogs */
+.borderSection label[for="username"],
+.borderSection label[for="password"] {
   display: none !important;
 }
 
-/* Hide regular login button (not the OIDC button with id="sad") */
-button[type="submit"]:not([id="sad"]) {
+/* Hide regular login button - but only within .borderSection (login form), not in dialogs */
+.borderSection button[type="submit"]:not([id="sad"]) {
   display: none !important;
+}
+
+/* Ensure dialogs are NOT affected by the above rules - explicitly show elements in dialogs */
+.MuiDialog-paper .horizontalline,
+.MuiDialog-paper [class*="horizontalline"],
+.MuiDialog-paper input#username,
+.MuiDialog-paper input#password,
+.MuiDialog-paper label[for="username"],
+.MuiDialog-paper label[for="password"],
+.MuiDialog-paper button[type="submit"] {
+  display: revert !important;
 }
 
