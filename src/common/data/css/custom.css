@@ -630,3 +630,7 @@ button[class*="button"],
 .delete-user-view .MuiButton-root {
   color: #374151 !important;
 }
+
+img:has(+ form[name="loginForm"]){
+  width: 200px !important;
+}
