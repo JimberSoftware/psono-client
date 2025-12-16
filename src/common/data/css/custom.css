@@ -569,29 +569,3 @@ button[type="submit"]:not([id="sad"]) {
   display: none !important;
 }
 
-/* Hide Grid containers that contain username field */
-.MuiGrid-container:has(#username),
-.MuiGrid-container:has(#password) {
-  display: none !important;
-}
-
-/* Hide Grid containers that contain regular login button */
-.MuiGrid-container:has(button[type="submit"]:not([id="sad"])) {
-  display: none !important;
-}
-
-/* Hide remember me checkboxes - target containers after borderSection */
-.borderSection ~ .MuiGrid-container,
-.borderSection + .MuiGrid-container {
-  display: none !important;
-}
-
-/* Hide SAML provider sections - hide all but first OIDC button container */
-.borderSection > .MuiGrid-container:not(:first-of-type) {
-  display: none !important;
-}
-
-/* Alternative approach: Hide all containers after the first one in borderSection */
-.borderSection .MuiGrid-container ~ .MuiGrid-container {
-  display: none !important;
-}
