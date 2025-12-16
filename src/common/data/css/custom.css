@@ -463,6 +463,15 @@ a:hover .fa {
   border-radius: 12px !important;
 }
 
+/* Login phase dialog background - target the dark-box that contains login form */
+.dark-box,
+[class*="dark-box"],
+[class*="DarkBox"],
+.MuiDialog-paper:has(input#username),
+.MuiDialog-paper:has(button[id="sad"]) {
+  background: #111279 !important;
+}
+
 .MuiDialogTitle-root {
   background: var(--jimber-bg-soft) !important;
   border-bottom: 1px solid var(--jimber-border) !important;
@@ -514,4 +523,58 @@ a:hover .fa {
 *:focus-visible {
   outline: 2px solid var(--jimber-accent) !important;
   outline-offset: 2px !important;
+}
+
+/* ============================================
+   HIDE REGULAR LOGIN FORM - OIDC ONLY
+   ============================================ */
+/* Hide "OR" separators */
+.horizontalline,
+[class*="horizontalline"],
+p.horizontalline {
+  display: none !important;
+}
+
+/* Hide username/password input fields */
+input#username,
+input#password {
+  display: none !important;
+}
+
+/* Hide username/password labels */
+label[for="username"],
+label[for="password"] {
+  display: none !important;
+}
+
+/* Hide regular login button (not the OIDC button with id="sad") */
+button[type="submit"]:not([id="sad"]) {
+  display: none !important;
+}
+
+/* Hide Grid containers that contain username field */
+.MuiGrid-container:has(#username),
+.MuiGrid-container:has(#password) {
+  display: none !important;
+}
+
+/* Hide Grid containers that contain regular login button */
+.MuiGrid-container:has(button[type="submit"]:not([id="sad"])) {
+  display: none !important;
+}
+
+/* Hide remember me checkboxes - target containers after borderSection */
+.borderSection ~ .MuiGrid-container,
+.borderSection + .MuiGrid-container {
+  display: none !important;
+}
+
+/* Hide SAML provider sections - hide all but first OIDC button container */
+.borderSection > .MuiGrid-container:not(:first-of-type) {
+  display: none !important;
+}
+
+/* Alternative approach: Hide all containers after the first one in borderSection */
+.borderSection .MuiGrid-container ~ .MuiGrid-container {
+  display: none !important;
 }

@@ -278,6 +278,20 @@ const LoginViewForm = (props) => {
         browserClient.getConfig().then(onNewConfigLoaded);
     }, []);
 
+    // Auto-click Jimber SSO button when login form loads
+    React.useEffect(() => {
+        if (view === "default" && oidcProvider.length > 0 && !loginLoading && !props.oidcTokenId && !props.samlTokenId) {
+            // Small delay to ensure button is rendered
+            const timer = setTimeout(() => {
+                const oidcButton = document.querySelector('button[id="sad"]');
+                if (oidcButton && !oidcButton.disabled) {
+                    oidcButton.click();
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [view, oidcProvider, loginLoading, props.oidcTokenId, props.samlTokenId]);
+
 /*    React.useEffect(() => {
         // Only check MFA requirements if login is actually in progress
         if (loginInProgress) {
