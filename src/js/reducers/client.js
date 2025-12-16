@@ -21,7 +21,7 @@ function client(
         offlineCacheEncryptionSalt: null,
         notificationOnCopy: true,
         disableBrowserPm: true,
-        showFilters: true,
+        showFilters: false,
         hideDownloadBanner: false,
         lastPopupSearch: "",
     },

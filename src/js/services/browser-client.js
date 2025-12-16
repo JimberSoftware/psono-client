@@ -45,7 +45,7 @@ const theme = {
             "contrastText": "#9c27b0"
         },
         "blueBackground": {
-            "main": "#f7fbfb",
+            "main": "#CCCCCC",
             "light": "#f7fbfb",
             "dark": "#f7fbfb",
             "contrastText": "#f7fbfb"
@@ -131,7 +131,7 @@ const theme = {
         "MuiButton": {
             "styleOverrides": {
                 "containedPrimary": {
-                    "color": "white"
+                    "color": "#374151"
                 },
                 "root": {
                     "color": "rgba(0, 0, 0, 0.87)"

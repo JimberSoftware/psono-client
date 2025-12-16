@@ -3,7 +3,8 @@
   /* Main backgrounds */
   --jimber-bg: #ffffff;
   --jimber-bg-darker: #f0f7f7;
-  --jimber-bg-soft: #f7fbfb;
+  --jimber-bg-soft:rgb(249 250 251 / var(--tw-bg-opacity, 1));;
+  --jimber-standard-background: rgb(249 250 251 / var(--tw-bg-opacity, 1));
   --jimber-panel: #ffffff;
   --jimber-panel-lighter: #def3f3;
   --jimber-border: #d7ecec;
@@ -15,7 +16,7 @@
   --jimber-text-strong: #090a70;
   
   /* Jimber dark blue accent */
-  --jimber-accent: #090a70;
+  --jimber-accent: #374151;
   --jimber-accent-hover: #090a70;
   --jimber-accent-light: #090a70;
   --jimber-accent-glow: rgba(9, 10, 112, 0.1);
@@ -138,7 +139,7 @@ button,
 .btn,
 .btn-primary,
 .MuiButton-root,
-.MuiButton-containedPrimary {
+.MuiButton-containedPrimary, .MuiButton-colorPrimary  {
   background: transparent !important;
   border: none !important;
   color: #374151 !important;
@@ -304,7 +305,7 @@ a:hover .fa {
 }
 
 .MuiTableCell-head {
-  background: #f7fbfb !important;
+  background: var(--jimber-standard-background) !important;
   color: #444d5d !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
@@ -365,7 +366,7 @@ a:hover .fa {
 }
 
 .MuiTableBody-root .MuiTableRow-root:nth-of-type(even) {
-  background: #f7fbfb !important;
+  background: var(--jimber-standard-background) !important;
 }
 
 .MuiTableBody-root .MuiTableRow-root:hover {
@@ -428,7 +429,7 @@ a:hover .fa {
 
 .MuiAlert-standardInfo {
   background: rgba(59, 130, 246, 0.1) !important;
-  color: #93c5fd !important;
+  color: #517cae !important;
   border: 1px solid #3b82f6 !important;
 }
 
@@ -462,32 +463,10 @@ a:hover .fa {
   border-radius: 12px !important;
 }
 
-/* Login phase dialog background - target ONLY the login page container, NOT dialogs */
-/* Target containers with login form elements using :has() selector, but exclude dialogs */
-div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root):not(.MuiButton-root):not(.MuiGrid-item):not(.MuiGrid-container):not([role="dialog"]),
-div:has(input#username):not(.MuiTextField-root):not(.MuiInputBase-root):not(.MuiGrid-item):not(.MuiGrid-container):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]),
-.dark-box:has(button[id="sad"]):not(.MuiDialog-paper),
-.dark-box:has(input#username):not(.MuiDialog-paper),
-[class*="dark-box"]:has(button[id="sad"]):not(.MuiDialog-paper),
-[class*="dark-box"]:has(input#username):not(.MuiDialog-paper),
-[class*="DarkBox"]:has(button[id="sad"]):not(.MuiDialog-paper),
-[class*="DarkBox"]:has(input#username):not(.MuiDialog-paper) {
-  background: #8dcfcf !important;
-}
 
-/* More specific: Target the login page container directly, exclude dialogs */
-/* The DarkBox component wraps the login form, so target parent divs */
-body:not(.loading) > #app > div:has(button[id="sad"]):not(.MuiDialog-root),
-body:not(.loading) > #app > div:has(input#username):not(.MuiDialog-root),
-body:not(.loading) > div > div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]),
-body:not(.loading) > div > div:has(input#username):not(.MuiDialog-paper):not(.MuiDialog-root):not([role="dialog"]) {
-  background: #8dcfcf !important;
-}
 
-/* Target by logo + button combination (login page structure), exclude dialogs */
-div:has(img[src*="logo"]):has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDialog-root) {
-  background: #8dcfcf !important;
-}
+
+
 
 .MuiDialogTitle-root {
   background: var(--jimber-bg-soft) !important;
@@ -581,3 +560,73 @@ div:has(img[src*="logo"]):has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiDi
   display: revert !important;
 }
 
+
+body {
+  background: #fcfcfd !important;
+}
+/* Target the div that contains the login form */
+div:has(form[name="loginForm"]) {
+  background: #fcfcfd !important;
+  border-radius: 0.5rem; /* or 0.75rem for larger */
+  border: 1px solid var(--jimber-border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.MuiInputBase-root {
+  background: #fcfcfd !important;
+}
+.MuiInputBase-root textarea {
+  background: #fcfcfd !important;
+}
+#PsonoDownloadBanner {
+  display: none !important;
+}
+
+div:has(button[id="sad"]) ~ * {
+  /* All siblings after the Grid container */
+  display: none !important;
+}
+.MuiButton-colorPrimary {
+  color: #374151 !important;
+}
+
+/* Override inline styles with white !important - must be more specific */
+button[style*="white"],
+button[style*="color: white"],
+button[style*="color:white"],
+.MuiButton-root[style*="white"],
+.MuiButton-root[style*="color: white"],
+.MuiButton-root[style*="color:white"],
+.MuiButton-containedPrimary[style*="white"],
+.MuiButton-containedPrimary[style*="color: white"],
+.MuiButton-containedPrimary[style*="color:white"],
+button.MuiButton-containedPrimary,
+.MuiButton-containedPrimary.MuiButton-colorPrimary {
+  color: #374151 !important;
+}
+
+/* Override Material-UI makeStyles classes with white !important */
+button[class*="button"],
+.MuiButton-root[class*="button"] {
+  color: #374151 !important;
+}
+
+/* Override specific views that use white !important in inline styles */
+.authenticate-view button,
+.authenticate-view .MuiButton-root,
+.register-view button,
+.register-view .MuiButton-root,
+.lost-password-view button,
+.lost-password-view .MuiButton-root,
+.logout-success-view button,
+.logout-success-view .MuiButton-root,
+.key-transfer-view button,
+.key-transfer-view .MuiButton-root,
+.enforce-two-fa-view button,
+.enforce-two-fa-view .MuiButton-root,
+.emergency-code-view button,
+.emergency-code-view .MuiButton-root,
+.delete-user-view button,
+.delete-user-view .MuiButton-root {
+  color: #374151 !important;
+}
