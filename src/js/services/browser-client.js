@@ -45,7 +45,7 @@ const theme = {
             "contrastText": "#9c27b0"
         },
         "blueBackground": {
-            "main": "#CCCCCC",
+            "main": "#f7fbfb",
             "light": "#f7fbfb",
             "dark": "#f7fbfb",
             "contrastText": "#f7fbfb"

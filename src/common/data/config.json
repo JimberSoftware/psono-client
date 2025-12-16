@@ -16,7 +16,7 @@
   "authentication_methods": ["OIDC"],
   "oidc_provider": [{
     "provider_id": 1,
-    "title": "Login with Jimber",
+    "title": "Password Manager",
     "button_name": "Login with Google"
   }],
   "saml_provider": [],
