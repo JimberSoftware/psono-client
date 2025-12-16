@@ -58,10 +58,9 @@ body.loading {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Dark box (login panel) */
-.dark-box,
-[class*="dark-box"],
-[class*="DarkBox"] {
+/* Dark box (login panel) - default styling (only for non-login pages) */
+.dark-box:not(:has(button[id="sad"])):not(:has(input#username)),
+[class*="dark-box"]:not(:has(button[id="sad"])):not(:has(input#username)) {
   background: var(--jimber-panel) !important;
   border: 1px solid var(--jimber-border) !important;
 }
@@ -464,11 +463,29 @@ a:hover .fa {
 }
 
 /* Login phase dialog background - target the dark-box that contains login form */
-.dark-box,
-[class*="dark-box"],
-[class*="DarkBox"],
-.MuiDialog-paper:has(input#username),
-.MuiDialog-paper:has(button[id="sad"]) {
+/* Target containers with login form elements using :has() selector */
+div:has(button[id="sad"]):not(.MuiDialog-paper):not(.MuiButton-root):not(.MuiGrid-item):not(.MuiGrid-container),
+div:has(input#username):not(.MuiTextField-root):not(.MuiInputBase-root):not(.MuiGrid-item):not(.MuiGrid-container),
+.dark-box:has(button[id="sad"]),
+.dark-box:has(input#username),
+[class*="dark-box"]:has(button[id="sad"]),
+[class*="dark-box"]:has(input#username),
+[class*="DarkBox"]:has(button[id="sad"]),
+[class*="DarkBox"]:has(input#username) {
+  background: #111279 !important;
+}
+
+/* More specific: Target the login page container directly */
+/* The DarkBox component wraps the login form, so target parent divs */
+body:not(.loading) > #app > div:has(button[id="sad"]),
+body:not(.loading) > #app > div:has(input#username),
+body:not(.loading) > div > div:has(button[id="sad"]):not(.MuiDialog-paper),
+body:not(.loading) > div > div:has(input#username):not(.MuiDialog-paper) {
+  background: #111279 !important;
+}
+
+/* Target by logo + button combination (login page structure) */
+div:has(img[src*="logo"]):has(button[id="sad"]) {
   background: #111279 !important;
 }
 
