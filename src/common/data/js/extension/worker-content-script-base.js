@@ -18,7 +18,13 @@ var ClassWorkerContentScriptBase = function (browser, setTimeout) {
                 observe(windows[i]);
             }
         });
-        browser.runtime.onMessage.addListener(onMessage);
+        try {
+            if (browser.runtime && browser.runtime.onMessage) {
+                browser.runtime.onMessage.addListener(onMessage);
+            }
+        } catch (e) {
+            console.warn("Could not set up message listener - extension context may be invalid");
+        }
     }
 
     /**
@@ -142,21 +148,37 @@ var ClassWorkerContentScriptBase = function (browser, setTimeout) {
      * @param func
      */
     function emit(event, data, func) {
-        browser.runtime.sendMessage({ event: event, data: data }, function (response) {
-            if (func) {
-                func(response);
-            }
-            if (typeof response === "undefined" || !response.hasOwnProperty("event")) {
+        try {
+            // Check if extension context is still valid
+            if (!browser.runtime || !browser.runtime.id) {
+                console.warn("Extension context invalidated - please refresh the page");
                 return;
             }
-            for (
-                let i = 0;
-                registrations.hasOwnProperty(response.event) && i < registrations[response.event].length;
-                i++
-            ) {
-                registrations[response.event][i](response.data);
-            }
-        });
+            browser.runtime.sendMessage({ event: event, data: data }, function (response) {
+                // Check for runtime errors (e.g., extension context invalidated)
+                if (browser.runtime.lastError) {
+                    console.warn("Extension communication error:", browser.runtime.lastError.message);
+                    return;
+                }
+                if (func) {
+                    func(response);
+                }
+                if (typeof response === "undefined" || !response.hasOwnProperty("event")) {
+                    return;
+                }
+                for (
+                    let i = 0;
+                    registrations.hasOwnProperty(response.event) && i < registrations[response.event].length;
+                    i++
+                ) {
+                    registrations[response.event][i](response.data);
+                }
+            });
+        } catch (e) {
+            // Extension context invalidated - this happens when extension is reloaded
+            // while content scripts are still active on pages
+            console.warn("Extension context invalidated - please refresh the page");
+        }
     }
 
     /**

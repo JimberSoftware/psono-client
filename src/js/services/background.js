@@ -183,7 +183,7 @@ function updateContextMenu() {
     chrome.contextMenus.removeAll(function() {
         const contextMenu = chrome.contextMenus.create({
             id: CM_PSONO_ID,
-            title: "Psono",
+            title: "Jimber Passwords",
             contexts: ["all"],
         });
         chrome.contextMenus.create({

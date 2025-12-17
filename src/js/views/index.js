@@ -47,6 +47,7 @@ const IndexView = (props) => {
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const hasTwoFactor = useSelector((state) => state.user.hasTwoFactor);
     const deviceCode = useSelector((state) => state.device.deviceCode);
+    const rehydrated = useSelector((state) => state._persist?.rehydrated);
 
     const [showDeviceCodeModal, setShowDeviceCodeModal] = useState(false);
     const pathname = window.location.pathname;
@@ -218,6 +219,12 @@ const IndexView = (props) => {
                 window.location.href = "key-transfer.html";
             }, 1);
         }
+        // Wait for persistence to rehydrate before showing login screen
+        // This prevents a flash of the login screen when user is actually logged in
+        if (!rehydrated) {
+            return null;
+        }
+        
         if (!isLoggedIn) {
             return (
                 <Switch>
