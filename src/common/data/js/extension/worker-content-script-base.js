@@ -151,13 +151,14 @@ var ClassWorkerContentScriptBase = function (browser, setTimeout) {
         try {
             // Check if extension context is still valid
             if (!browser.runtime || !browser.runtime.id) {
-                console.warn("Extension context invalidated - please refresh the page");
+                // Silently fail - extension context is gone, likely due to reload
                 return;
             }
             browser.runtime.sendMessage({ event: event, data: data }, function (response) {
-                // Check for runtime errors (e.g., extension context invalidated)
+                // Check for runtime errors (e.g., extension context invalidated, message port closed)
                 if (browser.runtime.lastError) {
-                    console.warn("Extension communication error:", browser.runtime.lastError.message);
+                    // These errors are expected when service worker is inactive or extension is reloaded
+                    // Just silently ignore them to avoid console spam
                     return;
                 }
                 if (func) {
@@ -177,7 +178,7 @@ var ClassWorkerContentScriptBase = function (browser, setTimeout) {
         } catch (e) {
             // Extension context invalidated - this happens when extension is reloaded
             // while content scripts are still active on pages
-            console.warn("Extension context invalidated - please refresh the page");
+            // Silently fail to avoid console spam
         }
     }
 

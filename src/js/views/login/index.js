@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = ({fullWidth}) => {
     const classes = useStyles();
     let { samlTokenId, oidcTokenId } = useParams();
+    
+    // Always render the full login view structure
+    // The LoginViewForm handles showing nothing while OIDC/SAML token is being processed
     return (
         <>
             <FrameControls />

@@ -98,6 +98,11 @@ const IndexView = (props) => {
         console.log("BACKGROUND");
         return "BACKGROUND";
     } else if (pathname.endsWith("/default_popup.html")) {
+        // Wait for persistence to rehydrate before rendering anything
+        // This prevents a flash of the login screen when user is actually logged in
+        if (!rehydrated) {
+            return null;
+        }
         if (!isLoggedIn) {
             return (
                 <Switch>
@@ -163,6 +168,10 @@ const IndexView = (props) => {
             </Switch>
         );
     } else if (pathname.endsWith("/popup_pgp.html")) {
+        // Wait for persistence to rehydrate before rendering anything
+        if (!rehydrated) {
+            return null;
+        }
         if (!isLoggedIn) {
             return (
                 <Switch>
@@ -207,6 +216,12 @@ const IndexView = (props) => {
         return <ActivateSuccessfulView {...props} />;
     } else {
         // pathname.endsWith('/index.html')
+        // Wait for persistence to rehydrate before rendering anything
+        // This prevents a flash of the login screen when user is actually logged in
+        if (!rehydrated) {
+            return null;
+        }
+        
         if (isLoggedIn && !hasTwoFactor && user.requireTwoFaSetup()) {
             setTimeout(function () {
                 // Timeout required, otherwise setUserInfo3 doesn't finish and not persisted
@@ -218,11 +233,6 @@ const IndexView = (props) => {
                 // Timeout required, otherwise setUserInfo3 doesn't finish and not persisted
                 window.location.href = "key-transfer.html";
             }, 1);
-        }
-        // Wait for persistence to rehydrate before showing login screen
-        // This prevents a flash of the login screen when user is actually logged in
-        if (!rehydrated) {
-            return null;
         }
         
         if (!isLoggedIn) {

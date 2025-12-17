@@ -1844,6 +1844,14 @@ const LoginViewForm = (props) => {
 		);
 	}
 
+    // When processing OIDC/SAML callback, hide the form UNLESS we need user input
+    // This prevents flash of login button while still allowing decrypt/MFA/setup dialogs
+    const needsUserInput = decryptLoginDataFunction !== null || oidcSetupData !== null || multifactors.length > 0;
+    if ((props.oidcTokenId || props.samlTokenId) && !needsUserInput) {
+        // Still processing OR login complete and navigating away
+        return null;
+    }
+    
     // a webclient that doesn't allow different servers, doesn't need remote config, so we can hide it.
     const hideRemoteConfig = deviceService.isWebclient() && !allowCustomServer;
     return (
