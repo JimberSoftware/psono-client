@@ -1,35 +1,34 @@
 {
+  "title": "Jimber Passwords",
   "logo": "img/jimberlogo.svg",
   "logo_inverse": "img/jimberlogo.svg",
   "backend_servers": [{
-    "title": "Local Dev",
-    "url": "http://localhost:10100"
-  },{
-    "title": "Jimber Passwords",
-    "url": "https://passwords.jimber.io"
+    "title": "Jimber Password Manager",
+    "url": "https://passwords.jimber.io/server",
+    "verify_key": "8fba32e3ad4b0309d8e1d2786c7f863c2f712a330695e16a71f5bccf95646f93"
   }],
-  "allow_custom_server": true,
-  "allow_registration": false,
-  "allow_lost_password": false,
-  "allow_delete_account": false,
-  "auto_login": true,
-  "authentication_methods": ["OIDC"],
-  "oidc_provider": [{
-    "provider_id": 1,
-    "title": "Password Manager",
-    "button_name": "Login with Google"
-  }],
+  "base_url": "https://passwords.jimber.io/",
+  "allow_custom_server": false,
+  "allow_registration": true,
+  "allow_lost_password": true,
+  "disable_download_bar": false,
+  "authentication_methods": ["AUTHKEY", "OIDC"],
   "saml_provider": [],
+  "oidc_provider": [{
+    "title": "Login with Jimber",
+    "button_name": "Jimber SSO",
+    "provider_id": "1"
+  }],
   "more_links": [{
-    "href": "https://jimber.io/",
-    "title": "HOME",
+    "href": "https://doc.psono.com/",
+    "title": "DOCUMENTATION",
     "class": "fa-book"
   },{
-    "href": "privacy-policy.html",
+    "href": "https://www.jimber.io/privacy-policy/",
     "title": "PRIVACY_POLICY",
     "class": "fa-user-secret"
   },{
-    "href": "https://jimber.io/about-us",
+    "href": "https://www.jimber.io/",
     "title": "ABOUT_US",
     "class": "fa-info-circle"
   }]
