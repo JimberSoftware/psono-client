@@ -30,6 +30,7 @@ const gpgMessages = {};
 let numTabs;
 let clearFillPasswordTimeout;
 let clearFillElsterCertificateTimeout;
+let isUpdatingContextMenu = false;
 
 const CM_PSONO_ID = "psono-psono";
 const CM_DATASTORE_ID = "psono-datastore";
@@ -43,7 +44,7 @@ function activate() {
 
     if (typeof browser.runtime.setUninstallURL !== "undefined") {
         // set url to open if someone uninstalls our extension
-        browser.runtime.setUninstallURL("https://psono.com/uninstall-successfull/");
+        browser.runtime.setUninstallURL("https://jimber.io/uninstall-successful/");
     }
 
     if (typeof browser.runtime.onInstalled !== "undefined") {
@@ -180,7 +181,19 @@ function updateContextMenu() {
     if (!chrome.contextMenus) {
         return;
     }
+    // Prevent concurrent updates
+    if (isUpdatingContextMenu) {
+        return;
+    }
+    isUpdatingContextMenu = true;
+    
     chrome.contextMenus.removeAll(function() {
+        // Check for errors during removeAll
+        if (chrome.runtime.lastError) {
+            console.warn('Error removing context menus:', chrome.runtime.lastError.message);
+            isUpdatingContextMenu = false;
+            return;
+        }
         const contextMenu = chrome.contextMenus.create({
             id: CM_PSONO_ID,
             title: "Jimber Passwords",
@@ -379,6 +392,9 @@ function updateContextMenu() {
         }
         searchCreditCard().then(addAutofillCreditCards);
         searchIdentity().then(addAutofillIdentities);
+        
+        // Reset the update flag
+        isUpdatingContextMenu = false;
     })
 }
 

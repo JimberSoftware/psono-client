@@ -9,6 +9,10 @@ let _notifications = {};
  * @param tabId
  */
 function showNotificationBarInTab(tabId) {
+    if (typeof tabId !== 'number' || tabId < 0) {
+        console.warn('Invalid tab ID for showNotificationBarInTab:', tabId);
+        return;
+    }
     if (!_notifications.hasOwnProperty(tabId)) {
         return;
     }
@@ -25,6 +29,10 @@ function showNotificationBarInTab(tabId) {
  * @param tabId The id of the tab
  */
 function removeNotificationBar(tabId) {
+    if (typeof tabId !== 'number' || tabId < 0) {
+        console.warn('Invalid tab ID for removeNotificationBar:', tabId);
+        return;
+    }
     browserClient.emitTab(tabId, "remove-notification-bar", {});
 }
 
@@ -79,10 +87,11 @@ function onNotificationBarReady(request, sender, sendResponse) {
     if (!sender.tab) {
         return;
     }
-    if (!_notifications.hasOwnProperty(sender.tab.id)) {
-        removeNotificationBar(sender.tab.id)
+    if (_notifications.hasOwnProperty(sender.tab.id)) {
+        showNotificationBarInTab(sender.tab.id);
+    } else {
+        removeNotificationBar(sender.tab.id);
     }
-    showNotificationBarInTab(sender.tab.id)
 }
 
 /**

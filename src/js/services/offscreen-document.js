@@ -53,7 +53,15 @@ async function createOffscreenDocument() {
  */
 async function sendMessage(event, data, fnc) {
     await createOffscreenDocument()
-    chrome.runtime.sendMessage({ event: event, data: data }, fnc);
+    chrome.runtime.sendMessage({ event: event, data: data }, function(response) {
+        // Silently handle errors - service worker may be inactive
+        if (chrome.runtime.lastError) {
+            return;
+        }
+        if (fnc) {
+            fnc(response);
+        }
+    });
 }
 
 /**

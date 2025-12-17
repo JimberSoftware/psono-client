@@ -730,10 +730,32 @@ function getActiveTabUrl() {
  * @param {function} [callbackFunction] Ann optional callback function
  */
 function emitTab(tabId, event, data, callbackFunction) {
+    // Validate tab ID
+    if (typeof tabId !== 'number' || tabId < 0) {
+        console.warn('Invalid tab ID for emitTab:', tabId);
+        return;
+    }
+    
     if (TARGET === "firefox") {
-        browser.tabs.sendMessage(tabId, { event: event, data: data }, callbackFunction);
+        browser.tabs.sendMessage(tabId, { event: event, data: data }, function(response) {
+            // Silently handle errors - tab may be closed or content script may be inactive
+            if (browser.runtime.lastError) {
+                return;
+            }
+            if (callbackFunction) {
+                callbackFunction(response);
+            }
+        });
     } else if (TARGET === "chrome") {
-        chrome.tabs.sendMessage(tabId, { event: event, data: data }, callbackFunction);
+        chrome.tabs.sendMessage(tabId, { event: event, data: data }, function(response) {
+            // Silently handle errors - tab may be closed or content script may be inactive
+            if (chrome.runtime.lastError) {
+                return;
+            }
+            if (callbackFunction) {
+                callbackFunction(response);
+            }
+        });
     }
 }
 
@@ -761,10 +783,18 @@ function getURL(path) {
 function emit(event, data) {
     if (TARGET === "firefox") {
         browser.runtime.sendMessage({ event: event, data: data }, function (response) {
+            // Silently handle errors - service worker may be inactive
+            if (browser.runtime.lastError) {
+                return;
+            }
             //console.log(response);
         });
     } else if (TARGET === "chrome") {
         chrome.runtime.sendMessage({ event: event, data: data }, function (response) {
+            // Silently handle errors - service worker may be inactive
+            if (chrome.runtime.lastError) {
+                return;
+            }
             //console.log(response);
         });
     }
@@ -780,9 +810,25 @@ function emit(event, data) {
  */
 function emitSec(event, data, fnc) {
     if (TARGET === "firefox") {
-        browser.runtime.sendMessage({ event: event, data: data }, fnc);
+        browser.runtime.sendMessage({ event: event, data: data }, function(response) {
+            // Silently handle errors - service worker may be inactive
+            if (browser.runtime.lastError) {
+                return;
+            }
+            if (fnc) {
+                fnc(response);
+            }
+        });
     } else if (TARGET === "chrome") {
-        chrome.runtime.sendMessage({ event: event, data: data }, fnc);
+        chrome.runtime.sendMessage({ event: event, data: data }, function(response) {
+            // Silently handle errors - service worker may be inactive
+            if (chrome.runtime.lastError) {
+                return;
+            }
+            if (fnc) {
+                fnc(response);
+            }
+        });
     } else {
         // pass
     }

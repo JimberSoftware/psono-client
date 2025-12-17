@@ -1089,7 +1089,7 @@ const LoginViewForm = (props) => {
                                     variant="contained"
                                     color="primary"
                                     onClick={initiateOidcLoginHelper}
-                                    type={Boolean(username) && Boolean(password) ? "button": "submit"}
+                                    type="button"
                                     id="sad"
                                 >
                                     <span
@@ -1131,7 +1131,7 @@ const LoginViewForm = (props) => {
                                     variant="contained"
                                     color="primary"
                                     onClick={initiateSamlLoginHelper}
-                                    type={Boolean(username) && Boolean(password) ? "button": "submit"}
+                                    type="button"
                                     id="sad"
                                 >
                                     <span
@@ -1847,10 +1847,7 @@ const LoginViewForm = (props) => {
     // When processing OIDC/SAML callback, hide the form UNLESS we need user input
     // This prevents flash of login button while still allowing decrypt/MFA/setup dialogs
     const needsUserInput = decryptLoginDataFunction !== null || oidcSetupData !== null || multifactors.length > 0;
-    if ((props.oidcTokenId || props.samlTokenId) && !needsUserInput) {
-        // Still processing OR login complete and navigating away
-        return null;
-    }
+    const shouldHideForm = (props.oidcTokenId || props.samlTokenId) && !needsUserInput;
     
     // a webclient that doesn't allow different servers, doesn't need remote config, so we can hide it.
     const hideRemoteConfig = deviceService.isWebclient() && !allowCustomServer;
@@ -1858,9 +1855,12 @@ const LoginViewForm = (props) => {
         <form
             onSubmit={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
+                return false;
             }}
             name="loginForm"
             autoComplete="off"
+            style={shouldHideForm ? { display: 'none' } : {}}
         >
             {formContent}
             <div className={`${props.fullWidth ? 'full-width-' : ''}box-footer`}>
