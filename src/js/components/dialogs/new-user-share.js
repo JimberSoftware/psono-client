@@ -116,10 +116,21 @@ const DialogNewUserShare = (props) => {
         if (!isSubscribed) {
             return;
         }
-        let domain = configJson["backend_servers"][0]["domain"];
+        
+        // Extract domain from logged-in user's username (everything after @)
+        const currentUsername = getStore().getState().user.username;
+        let domain;
+        
+        if (currentUsername && currentUsername.includes('@')) {
+            // Use domain from user's email address
+            domain = currentUsername.split('@')[1];
+        } else {
+            // Fallback to config-based domain if no @ in username
+            domain = configJson["backend_servers"][0]["domain"];
 
-        if (domain === 'psono.pw' && serverUrl !== 'https://www.psono.pw/server') {
-            domain = helperService.getDomainWithoutWww(serverUrl);
+            if (domain === 'psono.pw' && serverUrl !== 'https://www.psono.pw/server') {
+                domain = helperService.getDomainWithoutWww(serverUrl);
+            }
         }
 
         setDomain(domain);
